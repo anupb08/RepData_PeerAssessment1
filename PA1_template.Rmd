@@ -44,7 +44,7 @@ plot(avarage_steps_in_interval, type = "l",
 # 2. Which 5-minute interval, on average across all the days in the dataset, 
 # contains the maximum number of steps?
 intervals <- data.frame(interval=names(avarage_steps_in_interval),mean=avarage_steps_in_interval)
-max_interval <- intervals[which.max(df$mean),]
+max_interval <- intervals[which.max(intervals$mean),]
 max_interval
 ```
 The 5-minute interval with the highest average number of steps corresponds to the interval between 835 and 840 (ie, 8:35 AM and 8:40 AM).
