@@ -28,7 +28,6 @@ data$date <- as.Date(data$date, format= "%Y-%m-%d") #Convert date field to Date 
 ```
 
 ## What is mean total number of steps taken per day?
-Ignoring missing values in data.
 
 ```r
 # 1. Calculate the total number of steps taken per day
