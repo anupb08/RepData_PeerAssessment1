@@ -12,6 +12,7 @@ This assignment is to analysis of personal movement activity data. The dataset i
 ## Loading and preprocessing the data
 Assuming that "activity.zip" file is in the current directory
 ```{r}
+library(ggplot2)
 unzip("activity.zip")
 data<- read.csv("activity.csv", header=TRUE)
 str(data)  # check the default data field type
@@ -38,12 +39,12 @@ The mean is 10766.19 and median is 10765.
 # make interval field as factor of 5-minute interval
 data$interval <- factor(as.character(data$interval), levels=unique(data$interval)) 
 avarage_steps_in_interval <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
-plot(avarage_steps_in_interval, type = "l",
-   main = "Average steps 5-minute interval across all days",
-     ylab = "Average steps", xlab = "5-minute interval")
-# 2. Which 5-minute interval, on average across all the days in the dataset, 
 # contains the maximum number of steps?
 intervals <- data.frame(interval=names(avarage_steps_in_interval),mean=avarage_steps_in_interval)
+intervals$interval <- as.numeric(as.character(intervals$interval))
+ggplot(data = intervals, aes(x = interval, y = mean)) + geom_line() + 
+    xlab("interval in minute") + ylab("average number of steps taken")
+# 2. Which 5-minute interval, on average across all the days in the dataset, 
 max_interval <- intervals[which.max(intervals$mean),]
 max_interval
 ```
@@ -96,11 +97,11 @@ The mean is 10766.19 and median is 10766.19. Because we  have chosen mean value 
 activity_data <- cbind(new_data, daytype=ifelse(weekdays(new_data$date) == "Saturday" |       
                                       weekdays(new_data$date) == "Sunday", "weekend", "weekday"))
 
-activity_data$interval <- as.numeric(activity_data$interval)
+activity_data$interval <- as.numeric(as.character(activity_data$interval))
 averages <- aggregate(steps ~ interval + daytype, data=activity_data, mean)
-library(ggplot2)
-ggplot(averages, aes(interval, steps)) + geom_line() + facet_wrap(~daytype,nrow=2, ncol=1 ) +xlab("5-minute interval") + ylab("Number of steps")
+ggplot(averages, aes(interval, steps)) + geom_line() + facet_wrap(~daytype,nrow=2, ncol=1 ) +
+      xlab("interval in minute") + ylab("average number of steps taken")
 ```
 
-From the above graph we can see that in weekdays, there is high peek in 8:00 AM (=96*5/60) - 10:00 AM (=120*5/60) time intervals and very low in rest of the intervals. The reason of this pattern could be due to routine office work,  and that high peek time interval is used to do more intensity activity. In other hand, at weekend the activity pattern spread across through over the day.
+From the above graph we can see that in weekdays, there is high peek in 560 (~8AM) - 990 (~10AM) time intervals and very low in rest of the intervals. The reason of this pattern could be due to routine office work,  and that high peek time interval is used to do more intensity activity. In other hand, at weekend the activity pattern spread across through over the day.
 
